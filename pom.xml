@@ -11,6 +11,7 @@
 
     <modules>
         <module>rest-example</module>
+        <module>microservice</module>
     </modules>
 
 </project>

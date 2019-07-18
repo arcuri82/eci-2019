@@ -1,0 +1,73 @@
+version: '3.3'
+
+services:
+
+  # The Spring Cloud Gateway will be the ONLY Docker instance
+  # that does open a port accessible from outside the
+  # Docker network.
+
+  scg:
+    build:
+      context: ./gateway-scg
+      dockerfile: Dockerfile
+    ports:
+      - "80:8080"
+    depends_on:
+        - eureka
+
+  eureka:
+    build:
+      context: ./gateway-eureka
+      dockerfile: Dockerfile
+
+
+  frontend:
+    build:
+      context: ./gateway-frontend
+      dockerfile: Dockerfile
+
+
+  # Note that here I am using a real database.
+  # Cannot use embedded H2 as done so far, because
+  # all the different instances of the replicated services
+  # need to work on the same data.
+  #
+  # All these replicated instances of "service" will use the
+  # same database.
+  # However, if we had other kinds of APIs here, each kind will
+  # need to use their own database.
+  postgres:
+    image: "postgres:10"
+
+  service_0:
+     build:
+        context: ./gateway-service
+        dockerfile: Dockerfile
+     environment:
+        - TSDES_SERVICE_ID=A
+     depends_on:
+        - scg
+        - postgres
+
+
+  service_1:
+     build:
+        context: ./gateway-service
+        dockerfile: Dockerfile
+     environment:
+        - TSDES_SERVICE_ID=B
+     depends_on:
+        - scg
+        - postgres
+
+  service_2:
+     build:
+        context: ./gateway-service
+        dockerfile: Dockerfile
+     environment:
+        - TSDES_SERVICE_ID=C
+     depends_on:
+        - scg
+        - postgres
+
+

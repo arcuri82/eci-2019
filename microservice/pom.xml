@@ -1,0 +1,480 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.tsdes.advanced.microservice</groupId>
+    <artifactId>microservice</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>discovery</module>
+        <module>gateway</module>
+    </modules>
+
+
+    <properties>
+        <version.kotlin>1.3.11</version.kotlin>
+        <version.springcloud>Greenwich.RELEASE</version.springcloud>
+        <version.springfox>2.9.2</version.springfox>
+        <version.graphql-spring>4.2.0</version.graphql-spring>
+        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <fs>${file.separator}</fs>
+        <version.java>1.8</version.java>
+        <version.springboot>2.1.0.RELEASE</version.springboot>
+        <version.junit>5.3.2</version.junit>
+        <version.junit.platform>1.3.1</version.junit.platform>
+        <version.jacoco>0.7.9</version.jacoco>
+        <version.h2>1.4.197</version.h2>
+        <version.postgres>42.1.4</version.postgres>
+        <version.resteasy>3.1.3.Final</version.resteasy>
+        <version.testcontainers>1.10.1</version.testcontainers>
+        <version.selenium>3.141.59</version.selenium>
+    </properties>
+
+
+    <dependencies>
+        <!--
+               The Java API comes with the JDK itself.
+               On the other hand, the Kotlin API is treated like any other
+               third-party library, and we need to include it here as a dependency.
+
+               Unfortunately, the name of the supported JDK is in the id of
+               the artifact itself.
+               Why a problem? The day a new JDK version is used, would need to update
+               every single module :(
+               So, we add it by default to all submodules.
+          -->
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+        </dependency>
+        <!--
+            Looks like kotlin-reflect is now a requirement in Spring Boot 2.
+            So, as we use Kotlin in all modules, we add it here by default.
+        -->
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
+        </dependency>
+
+
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--
+                Own modules used in other modules
+            -->
+            <dependency>
+                <groupId>org.tsdes.advanced</groupId>
+                <artifactId>data-format</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.tsdes.advanced</groupId>
+                <artifactId>example-news</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.tsdes.advanced.rest</groupId>
+                <artifactId>rest-dto</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.tsdes.advanced.rest</groupId>
+                <artifactId>rest-exception</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.tsdes.advanced.graphql</groupId>
+                <artifactId>graphql-dto</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- Kotlin dependencies -->
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib</artifactId>
+                <version>${version.kotlin}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib-jdk8</artifactId>
+                <version>${version.kotlin}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-reflect</artifactId>
+                <version>${version.kotlin}</version>
+            </dependency>
+
+
+            <!-- Spring Cloud BOM -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${version.springcloud}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+
+            <!-- SpringFox for Swagger -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${version.springfox}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${version.springfox}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-spring-web</artifactId>
+                <version>${version.springfox}</version>
+            </dependency>
+
+            <!-- SpringBoot BOM -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <version>${version.springboot}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${version.springboot}</version>
+                <scope>test</scope>
+                <!-- Exclude JUnit 4, which is added by default-->
+                <exclusions>
+                    <exclusion>
+                        <groupId>junit</groupId>
+                        <artifactId>junit</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- Database -->
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${version.h2}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${version.postgres}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq</artifactId>
+                <version>3.10.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-core</artifactId>
+                <version>5.2.1</version>
+            </dependency>
+
+
+            <!-- test -->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${version.junit}</version>
+                <scope>test</scope>
+            </dependency>
+            <!--
+                This is needed for some libraries that do not support
+                JUnit 5 yet, like Arquillian:
+                https://github.com/arquillian/arquillian-core/issues/137
+
+                TODO: remove once Arquillian is supported
+              -->
+            <dependency>
+                <groupId>org.junit.vintage</groupId>
+                <artifactId>junit-vintage-engine</artifactId>
+                <version>${version.junit}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- to test REST APIs -->
+                <groupId>io.rest-assured</groupId>
+                <artifactId>rest-assured</artifactId>
+                <version>3.2.0</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- to mock web services -->
+                <groupId>com.github.tomakehurst</groupId>
+                <artifactId>wiremock-standalone</artifactId>
+                <version>2.2.1</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- used to control a browser for system testing -->
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-java</artifactId>
+                <version>${version.selenium}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- used to control a browser for system testing -->
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-api</artifactId>
+                <version>${version.selenium}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- used to control a browser for system testing -->
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-chrome-driver</artifactId>
+                <version>${version.selenium}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- used to control a browser for system testing -->
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-remote-driver</artifactId>
+                <version>${version.selenium}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- used to control a browser for system testing -->
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-support</artifactId>
+                <version>${version.selenium}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- for code coverage -->
+                <groupId>org.jacoco</groupId>
+                <artifactId>org.jacoco.core</artifactId>
+                <version>${version.jacoco}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- To use Docker from tests -->
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers</artifactId>
+                <version>${version.testcontainers}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>selenium</artifactId>
+                <version>${version.testcontainers}</version>
+                <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                        <artifactId>selenium-remote-driver</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <!-- For handling waiting of asynchronous events -->
+                <groupId>org.awaitility</groupId>
+                <artifactId>awaitility</artifactId>
+                <version>3.1.3</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- To mock/stub objects -->
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>2.23.0</version>
+                <scope>test</scope>
+            </dependency>
+
+
+            <!-- Misc -->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>1.2.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
+                <version>1.7.25</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>27.0-jre</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jsr310</artifactId>
+                <version>2.8.9</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-xml</artifactId>
+                <version>2.8.9</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>2.8.1</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.11</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-client</artifactId>
+                <version>${version.resteasy}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-jackson-provider</artifactId>
+                <version>${version.resteasy}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-jaxb-provider</artifactId>
+                <version>${version.resteasy}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm</artifactId>
+                <version>7.0</version>
+            </dependency>
+
+
+            <!-- for caching -->
+            <dependency>
+                <groupId>net.sf.ehcache</groupId>
+                <artifactId>ehcache</artifactId>
+                <version>2.10.5</version>
+            </dependency>
+            <!-- Looks like we cannot use new version, as HttpClient still rely on 2.x-->
+            <!--<dependency>-->
+            <!--<groupId>org.ehcache</groupId>-->
+            <!--<artifactId>ehcache</artifactId>-->
+            <!--<version>3.5.2</version>-->
+            <!--</dependency>-->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient-cache</artifactId>
+                <version>4.5.6</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <groupId>org.jetbrains.kotlin</groupId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+            </plugin>
+        </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <!-- see https://kotlinlang.org/docs/reference/using-maven.html -->
+                    <artifactId>kotlin-maven-plugin</artifactId>
+                    <groupId>org.jetbrains.kotlin</groupId>
+                    <version>${version.kotlin}</version>
+                    <!--
+                        Kotlin has a major "limitation" that all classes are final by default.
+                        Someone call it a "feature", others (like me) call it a "design flaw".
+                        See more at: https://discuss.kotlinlang.org/t/classes-final-by-default/166/77
+
+                        Why is it a problem? for example, it does not play well with all major frameworks
+                        out there like JPA, Spring, mocking, etc, as they require to create proxy
+                        classes that extend the classes you write.
+                        So here we have to use special plugins to bypass this Kotlin "feature"...
+                    -->
+                    <configuration>
+                        <jvmTarget>${version.java}</jvmTarget>
+                        <compilerPlugins>
+                            <plugin>spring</plugin>
+                            <plugin>jpa</plugin>
+                        </compilerPlugins>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.jetbrains.kotlin</groupId>
+                            <artifactId>kotlin-maven-allopen</artifactId>
+                            <version>${version.kotlin}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.jetbrains.kotlin</groupId>
+                            <artifactId>kotlin-maven-noarg</artifactId>
+                            <version>${version.kotlin}</version>
+                        </dependency>
+                    </dependencies>
+                    <executions>
+                        <execution>
+                            <id>compile</id>
+                            <goals>
+                                <goal>compile</goal>
+                            </goals>
+                            <configuration>
+                                <sourceDirs>
+                                    <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
+                                    <sourceDir>${project.basedir}/src/main/java</sourceDir>
+                                </sourceDirs>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>test-compile</id>
+                            <goals>
+                                <goal>test-compile</goal>
+                            </goals>
+                            <configuration>
+                                <sourceDirs>
+                                    <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
+                                    <sourceDir>${project.basedir}/src/test/java</sourceDir>
+                                </sourceDirs>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <!-- Need to create self-executable uber/fat jars -->
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${version.springboot}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+            </plugins>
+
+        </pluginManagement>
+    </build>
+
+</project>
