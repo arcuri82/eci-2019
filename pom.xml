@@ -12,6 +12,7 @@
     <modules>
         <module>rest-example</module>
         <module>microservice</module>
+        <module>search</module>
     </modules>
 
 </project>
