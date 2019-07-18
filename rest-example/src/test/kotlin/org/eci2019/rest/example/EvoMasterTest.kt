@@ -28,7 +28,7 @@ import  java.util.List
  * <br>
  * Needed budget for current results: 96%
  */
-internal class EvoSuiteTest {
+internal class EvoMasterTest {
 
     
     companion object {
