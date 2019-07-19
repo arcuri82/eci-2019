@@ -21,7 +21,6 @@
         <module>gateway-service</module>
         <module>gateway-eureka</module>
         <module>gateway-scg</module>
-        <module>gateway-e2e-tests</module>
     </modules>
 
 

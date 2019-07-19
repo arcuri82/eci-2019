@@ -1,4 +1,0 @@
-# Disable Eureka
-eureka:
-  client:
-    enabled: false
