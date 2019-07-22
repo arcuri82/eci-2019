@@ -2,7 +2,7 @@
 Course material for the Informatics Sciences School (ECI) 2019, Argentina.
 
 
-## WORK IN PROGRESS (material not finalized yet)
+## Development and Automated Testing of RESTful APIs
 
 This course is composed of 5 lessons, covering the following topics:
 
